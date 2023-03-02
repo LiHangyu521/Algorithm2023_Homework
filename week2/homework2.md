@@ -1,6 +1,6 @@
 # Homework2
-###### Name:李杭禹
-###### StudentID:2201212834
+###### Name: 李杭禹
+###### StudentID: 2201212834
 
 ## Leetcode 7
 
