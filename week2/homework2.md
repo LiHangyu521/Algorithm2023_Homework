@@ -4,8 +4,8 @@
 
 ## Leetcode 7
 
- #### 算法思路
- #### 代码实现
+#### 算法思路
+#### 代码实现
 
 
 ```python
@@ -105,3 +105,25 @@ class Solution(object):
 
 ## Leetcode 13
 ## Leetcode 66
+
+#### 算法思路
+#### 代码实现
+
+```python
+class Solution(object):
+    def plusOne(self, digits):
+        """
+        :type digits: List[int]
+        :rtype: List[int]
+        """
+        i = len(digits)-1
+        digits[i] = digits[i] + 1
+        while digits[i]==10 and i >=1 :
+            digits[i] = 0
+            digits[i-1] = digits[i-1]+1
+            i -= 1
+        if digits[0]==10:
+            digits[0] = 0
+            digits.insert(0,1)
+        return digits
+```
