@@ -142,6 +142,7 @@ class Solution(object):
         return num
 ```
 #### 运行结果
+![](image/leetcode_13.png)
 
 ## Leetcode 66
 
@@ -168,3 +169,4 @@ class Solution(object):
 ```
 
 #### 运行结果
+![](image/leetcode_66.png)
