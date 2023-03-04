@@ -104,6 +104,33 @@ class Solution(object):
 ```
 
 ## Leetcode 13
+#### 算法思路
+#### 代码实现
+```python
+class Solution(object):
+    def romanToInt(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        Roma_dict = {'I':1,
+                     'V':5,
+                     'X':10,
+                     'L':50,
+                     'C':100,
+                     'D':500,
+                     'M':1000}
+        num = 0
+        for i in range(len(s)):
+            if  i == len(s)-1:
+                num += Roma_dict[s[i]]
+            elif Roma_dict[s[i]] >= Roma_dict[s[i+1]]:
+                num += Roma_dict[s[i]]
+            else :
+                num -= Roma_dict[s[i]]
+        return num
+```
+
 ## Leetcode 66
 
 #### 算法思路
