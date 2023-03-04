@@ -108,6 +108,7 @@ class Solution(object):
             return flag*int(num_str)
 ```
 #### 运行结果
+![](https://github.com/LiHangyu521/Algorithm2023_Homework/blob/2c1f9802aa391e7e6c56b6bbb3ee75a894ca9d78/week2/image/leetcode_7.png)
 
 ## Leetcode 13
 #### 算法思路
