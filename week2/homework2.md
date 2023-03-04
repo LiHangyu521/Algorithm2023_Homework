@@ -7,7 +7,6 @@
 #### 算法思路
 #### 代码实现
 
-
 ```python
 class Stack(object):
     def __init__(self):
@@ -102,6 +101,7 @@ class Solution(object):
         else :
             return flag*int(num_str)
 ```
+#### 运行结果
 
 ## Leetcode 13
 #### 算法思路
@@ -130,6 +130,7 @@ class Solution(object):
                 num -= Roma_dict[s[i]]
         return num
 ```
+#### 运行结果
 
 ## Leetcode 66
 
@@ -154,3 +155,5 @@ class Solution(object):
             digits.insert(0,1)
         return digits
 ```
+
+#### 运行结果
