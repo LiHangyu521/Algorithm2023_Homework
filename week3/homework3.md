@@ -141,9 +141,11 @@ class Solution(object):
     根据方法一和方法二，如果我们能够得到的是倒数第 n 个节点的前驱节点而不是倒数第 n 个节点的话，删除操作会更加方便。因此我们可以考虑在初始时将 second 指向哑节点，其余的操作步骤不变。这样一来，当 first 遍历到链表的末尾时，second 的下一个节点就是我们需要删除的节点
 
 4. 递归
+    
     从最后一个节点开始count++（count为全局变量），当加到n时，恰好就是倒数第n个值。
     
-    链接：https://leetcode.cn/problems/remove-nth-node-from-end-of-list/solution/shan-chu-lian-biao-de-dao-shu-di-nge-jie-dian-b-61/1762404
+    参考代码链接：
+    https://leetcode.cn/problems/remove-nth-node-from-end-of-list/solution/shan-chu-lian-biao-de-dao-shu-di-nge-jie-dian-b-61/1762404
 #### 代码实现(2.双指针)
 
 ```python
