@@ -144,7 +144,7 @@ class Solution(object):
     
     从最后一个节点开始count++（count为全局变量），当加到n时，恰好就是倒数第n个值。
     
-    参考代码链接：
+    参考代码链接：  
     https://leetcode.cn/problems/remove-nth-node-from-end-of-list/solution/shan-chu-lian-biao-de-dao-shu-di-nge-jie-dian-b-61/1762404
 #### 代码实现(2.双指针)
 
