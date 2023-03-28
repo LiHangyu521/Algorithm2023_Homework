@@ -133,35 +133,23 @@ class Solution:
 
 #### 代码实现
 ```python
-# Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-class Solution(object):
-    def sortList(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        if not head or not head.next: return head # termination.
-        # cut the LinkedList at the mid index.
-        slow, fast = head, head.next
-        while fast and fast.next:
-            fast, slow = fast.next.next, slow.next
-        mid, slow.next = slow.next, None # save and cut.
-        # recursive for cutting.
-        left, right = self.sortList(head), self.sortList(mid)
-        # merge `left` and `right` linked list and return it.
-        h = res = ListNode(0)
-        while left and right:
-            if left.val < right.val: h.next, left = left, left.next
-            else: h.next, right = right, right.next
-            h = h.next
-        h.next = left if left else right
-        return res.next
-
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        if not grid or not grid[0]:
+            return 0
         
+        rows, columns = len(grid), len(grid[0])
+        dp = [[0] * columns for _ in range(rows)]
+        dp[0][0] = grid[0][0]
+        for i in range(1, rows):
+            dp[i][0] = dp[i - 1][0] + grid[i][0]
+        for j in range(1, columns):
+            dp[0][j] = dp[0][j - 1] + grid[0][j]
+        for i in range(1, rows):
+            for j in range(1, columns):
+                dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j]
+        
+        return dp[rows - 1][columns - 1]
 ```
 #### 运行结果
 ![](image/leetcode_64.png)
