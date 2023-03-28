@@ -221,6 +221,6 @@ class Solution:
 ```
 
 #### 运行结果
-![](image/leetcode_128.png)
+![](image/leetcode_120.png)
 
 
