@@ -10,7 +10,7 @@
 2) 完全背包问题
 3) 多重背包问题
 此外，还存在一些其他考法，例如恰好装满、求方案总数、求所有的方案等。本文接下来就分别讨论一下这些问题
-### 1. 01背包
+## 1. 01背包
 
 ### 1.1 题目
 最基本的背包问题就是01背包问题（01 knapsack problem）：一共有N件物品，第i（i从1开始）件物品的重量为w[i]，价值为v[i]。在总重量不超过背包承载上限W的情况下，能够装入背包的最大价值是多少？
@@ -44,7 +44,7 @@ for i = 1,...,N
 
 动态规划的核心思想避免重复计算在01背包问题中体现得淋漓尽致。第i件物品装入或者不装入而获得的最大价值完全可以由前面i-1件物品的最大价值决定，暴力枚举忽略了这个事实。
 
-### 2. 完全背包
+## 2. 完全背包
 
 ### 2.1 题目
 完全背包（unbounded knapsack problem）与01背包不同就是每种物品可以有无限多个：一共有N种物品，每种物品有无限多个，第i（i从1开始）种物品的重量为w[i]，价值为v[i]。在总重量不超过背包承载上限W的情况下，能够装入背包的最大价值是多少？
@@ -105,7 +105,7 @@ for i = 1,...,N
 
 更高效的转化方法是采用二进制的思想：把第 i 种物品拆成重量为 $\omega_{i}2^{k}$、价值为 $v_{i}2^{k}$ 的若干件物品，其中 k 取遍满足 $\omega_{i}2^{k} ≤ W$ 的非负整数。这是因为不管最优策略选几件第 i 种物品，总可以表示成若干个刚才这些物品的和（例：13 = 1 + 4 + 8）。这样就将转换后的物品数目降成了对数级别。
 
-### 3. 多重背包
+## 3. 多重背包
 
 ### 3.1 题目
 多重背包（bounded knapsack problem）与前面不同就是每种物品是有限个：一共有N种物品，第i（i从1开始）种物品的数量为n[i]，重量为w[i]，价值为v[i]。在总重量不超过背包承载上限W的情况下，能够装入背包的最大价值是多少？
@@ -136,7 +136,7 @@ for i = 1,...,N
  件物品，将原问题转化为了复杂度为 
  的 01 背包问题，相对于分析一是很大的改进。
 
-### 4. 其他情形
+## 4. 其他情形
 除了上述三种基本的背包问题外，还有一些其他的变种，如下图所示。
 ![image](https://user-images.githubusercontent.com/63528028/231266123-92bd18d6-fb12-4841-89ed-185d50a5d86a.png)
 
@@ -159,12 +159,14 @@ dp[i][j] = sum(dp[i−1][j], dp[i][j−w[i]]) // j >= w[i]
 
 以01背包为例，我们可以再用一个数组G[i][j]来记录方案，设 G[i][j] = 0表示计算 dp[i][j] 的值时是采用了max中的前一项(也即dp[i−1][j])，G[i][j] = 1 表示采用了方程的后一项。即分别表示了两种策略: 未装入第 i 个物品及装了第 i 个物品。其实我们也可以直接从求好的dp[i][j]反推方案：若 dp[i][j] = dp[i−1][j] 说明未选第i个物品，反之说明选了。
 
-### 5. LeetCode相关题目
+
+## 5. LeetCode相关题目
 本节对LeetCode上面的背包问题进行讨论。
 
+
 ### 5.1 Partition Equal Subset Sum（分割等和子集）
-Loading...
-​leetcode.com/problems/partition-equal-subset-sum/
+
+题目链接：https://leetcode.com/problems/partition-equal-subset-sum/
 
 题目给定一个只包含正整数的非空数组。问是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
 
@@ -201,8 +203,8 @@ bool canPartition(vector<int>& nums) {
     
 另外此题还有一个更巧妙更快的解法，基本思路是用一个bisets来记录所有可能子集的和。
 ### 5.2 Coin Change（零钱兑换）
-Loading...
-​leetcode.com/problems/coin-change/
+
+题目链接：https://leetcode.com/problems/coin-change/
 
 题目给定一个价值amount和一些面值，假设每个面值的硬币数都是无限的，问我们最少能用几个硬币组成给定的价值。
 
@@ -229,8 +231,8 @@ int coinChange(vector<int>& coins, int amount) {
 另外此题还可以进行搜索所有可能然后保持一个全局的结果res，但是直接搜索会超时，所以需要进行精心剪枝，剪枝后可击败99%。
     
 ### 5.3 Target Sum（目标和）
-Loading...
-​leetcode.com/problems/target-sum/
+
+题目链接：https://leetcode.com/problems/target-sum/
 
 这道题给了我们一个数组（元素非负），和一个目标值，要求给数组中每个数字前添加正号或负号所组成的表达式结果与目标值S相等，求有多少种情况。
 
@@ -256,8 +258,8 @@ int findTargetSumWays(vector<int>& nums, int S) {
 ```
 
 ### 5.4 Ones and Zeros（一和零）
-Loading...
-​leetcode.com/problems/ones-and-zeroes/
+
+题目链接： https://leetcode.com/problems/ones-and-zeroes/
 
 题目给定一个仅包含 0 和 1 字符串的数组。任务是从数组中选取尽可能多的字符串，使这些字符串包含的0和1的数目分别不超过m和n。
 
