@@ -69,65 +69,95 @@ class Solution:
 #### 运行结果
 ![110](https://user-images.githubusercontent.com/63528028/234437734-3f461505-5353-463f-ae40-6e383e73eea5.png)
 
-## Leetcode 64
+## Leetcode 235
 #### 题目描述
-给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
 
-说明：每次只能向下或者向右移动一步。
+百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
 
-```
-示例 1：
-输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
-输出：7
-解释：因为路径 1→3→1→1→1 的总和最小。
-```
+例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
 
-链接：https://leetcode.cn/problems/minimum-path-sum
+示例 1:
+
+输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+输出: 6 
+解释: 节点 2 和节点 8 的最近公共祖先是 6。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree
 
 #### 算法思路
-「147. 对链表进行插入排序」要求使用插入排序的方法对链表进行排序，插入排序的时间复杂度是 O(n2)，其中 n 是链表的长度。这道题考虑时间复杂度更低的排序算法。题目的进阶问题要求达到 O(nlogn) 的时间复杂度和 O(1) 的空间复杂度，时间复杂度是 O(nlogn) 的排序算法包括归并排序、堆排序和快速排序（快速排序的最差时间复杂度是 O(n2)），其中最适合链表的排序算法是归并排序。
-归并排序基于分治算法。最容易想到的实现方式是自顶向下的递归实现，考虑到递归调用的栈空间，自顶向下归并排序的空间复杂度是 O(logn)。如果要达到 O(1) 的空间复杂度，则需要使用自底向上的实现方式。
-###### 方法一：动态规划
+###### 方法一：两次遍历
 
-由于路径的方向只能是向下或向右，因此网格的第一行的每个元素只能从左上角元素开始向右移动到达，网格的第一列的每个元素只能从左上角元素开始向下移动到达，此时的路径是唯一的，因此每个元素对应的最小路径和即为对应的路径上的数字总和。
+注意到题目中给出的是一棵「二叉搜索树」，因此我们可以快速地找出树中的某个节点以及从根节点到该节点的路径，例如我们需要找到节点 p：
 
-对于不在第一行和第一列的元素，可以从其上方相邻元素向下移动一步到达，或者从其左方相邻元素向右移动一步到达，元素对应的最小路径和等于其上方相邻元素与其左方相邻元素两者对应的最小路径和中的最小值加上当前元素的值。由于每个元素对应的最小路径和与其相邻元素对应的最小路径和有关，因此可以使用动态规划求解。
+* 我们从根节点开始遍历；
+* 如果当前节点就是 p，那么成功地找到了节点；
+* 如果当前节点的值大于 p 的值，说明 p 应该在当前节点的左子树，因此将当前节点移动到它的左子节点；
+* 如果当前节点的值小于p 的值，说明 p 应该在当前节点的右子树，因此将当前节点移动到它的右子节点。
 
-创建二维数组 dp，与原始网格的大小相同，dp[i][j]表示从左上角出发到 (i,j) 位置的最小路径和。显然，dp[0][0]=grid[0][0]。对于 dp 中的其余元素，通过以下状态转移方程计算元素值。
+对于节点 q 同理。在寻找节点的过程中，我们可以顺便记录经过的节点，这样就得到了从根节点到被寻找节点的路径。
 
-* 当 i>0 且j=0 时，dp[i][0]=dp[i−1][0]+grid[i][0]。
+当我们分别得到了从根节点到 p 和 q 的路径之后，我们就可以很方便地找到它们的最近公共祖先了。显然，p 和 q 的最近公共祖先就是从根节点到它们路径上的「分岔点」，也就是最后一个相同的节点。因此，如果我们设从根节点到 p 的路径为数组 path_p，从根节点到 q 的路径为数组 path_q，那么只要找出最大的编号 i，其满足 path_p[i]=path_q[i]
 
-* 当 i=0i=0 且 j>0j>0 时，dp[0][j]=dp[0][j−1]+grid[0][j]。
-
-* 当 i>0i>0 且 j>0j>0 时，dp[i][j]=min(dp[i−1][j],dp[i][j−1])+grid[i][j]。
-
-最后得到 dp[m−1][n−1] 的值即为从网格左上角到网格右下角的最小路径和。
-
+那么对应的节点就是「分岔点」，即 p 和 q 的最近公共祖先就是 path_p[i]（或path_q[i]）。
 
 #### 代码实现
 ```python
 class Solution:
-    def minPathSum(self, grid: List[List[int]]) -> int:
-        if not grid or not grid[0]:
-            return 0
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        def getPath(root: TreeNode, target: TreeNode) -> List[TreeNode]:
+            path = list()
+            node = root
+            while node != target:
+                path.append(node)
+                if target.val < node.val:
+                    node = node.left
+                else:
+                    node = node.right
+            path.append(node)
+            return path
         
-        rows, columns = len(grid), len(grid[0])
-        dp = [[0] * columns for _ in range(rows)]
-        dp[0][0] = grid[0][0]
-        for i in range(1, rows):
-            dp[i][0] = dp[i - 1][0] + grid[i][0]
-        for j in range(1, columns):
-            dp[0][j] = dp[0][j - 1] + grid[0][j]
-        for i in range(1, rows):
-            for j in range(1, columns):
-                dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j]
+        path_p = getPath(root, p)
+        path_q = getPath(root, q)
+        ancestor = None
+        for u, v in zip(path_p, path_q):
+            if u == v:
+                ancestor = u
+            else:
+                break
         
-        return dp[rows - 1][columns - 1]
+        return ancestor
+```
+###### 方法二：一次遍历
+在方法一中，我们对从根节点开始，通过遍历找出到达节点 p 和 q 的路径，一共需要两次遍历。我们也可以考虑将这两个节点放在一起遍历。
+
+整体的遍历过程与方法一中的类似：
+
+* 我们从根节点开始遍历；
+* 如果当前节点的值大于 p 和 q 的值，说明 p 和 q 应该在当前节点的左子树，因此将当前节点移动到它的左子节点；
+* 如果当前节点的值小于 p 和 q 的值，说明 p 和 q 应该在当前节点的右子树，因此将当前节点移动到它的右子节点；
+* 如果当前节点的值不满足上述两条要求，那么说明当前节点就是「分岔点」。此时，p 和 q 要么在当前节点的不同的子树中，要么其中一个就是当前节点。
+
+可以发现，如果我们将这两个节点放在一起遍历，我们就省去了存储路径需要的空间。
+#### 代码实现
+```python
+class Solution:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        ancestor = root
+        while True:
+            if p.val < ancestor.val and q.val < ancestor.val:
+                ancestor = ancestor.left
+            elif p.val > ancestor.val and q.val > ancestor.val:
+                ancestor = ancestor.right
+            else:
+                break
+        return ancestor
 ```
 #### 运行结果
-![](image/leetcode_64.png)
+![235](https://user-images.githubusercontent.com/63528028/234438667-3e17b046-de07-4c4c-a299-9257347e5eef.png)
 
-## Leetcode 120
+## Leetcode 257
 
 #### 题目描述
 给定一个三角形 triangle ，找出自顶向下的最小路径和。
