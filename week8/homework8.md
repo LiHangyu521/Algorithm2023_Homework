@@ -14,13 +14,14 @@
 示例 1：
 
 输入：root = [3,9,20,null,null,15,7]
+
 输出：true
 
-来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/balanced-binary-tree
 
 #### 算法思路
 ###### 方法一：自顶向下的递归
+
 定义函数 height，用于计算二叉树中的任意一个节点 p 的高度：
 ```math
 \operatorname{height}(p)=\left\{\begin{array}{ll}
@@ -80,10 +81,11 @@ class Solution:
 示例 1:
 
 输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+
 输出: 6 
+
 解释: 节点 2 和节点 8 的最近公共祖先是 6。
 
-来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree
 
 #### 算法思路
@@ -167,9 +169,9 @@ class Solution:
 示例 1：
 
 输入：root = [1,2,3,null,5]
+
 输出：["1->2->5","1->3"]
 
-来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/binary-tree-paths
 
 #### 算法思路
