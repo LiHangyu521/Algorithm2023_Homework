@@ -160,70 +160,85 @@ class Solution:
 ## Leetcode 257
 
 #### 题目描述
-给定一个三角形 triangle ，找出自顶向下的最小路径和。
+给你一个二叉树的根节点 root ，按 任意顺序 ，返回所有从根节点到叶子节点的路径。
 
-每一步只能移动到下一行中相邻的结点上。相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。也就是说，如果正位于当前行的下标 i ，那么下一步可以移动到下一行的下标 i 或 i + 1 。
-```
+叶子节点 是指没有子节点的节点。
+
 示例 1：
 
-输入：triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
-输出：11
-解释：如下面简图所示：
-   2
-  3 4
- 6 5 7
-4 1 8 3
-自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
-```
-链接：https://leetcode.cn/problems/triangle
+输入：root = [1,2,3,null,5]
+输出：["1->2->5","1->3"]
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/binary-tree-paths
 
 #### 算法思路
-###### 动态规划
-我们用 f[i][j] 表示从三角形顶部走到位置 (i,j) 的最小路径和。这里的位置 (i,j) 指的是三角形中第 i 行第 j 列（均从 0 开始编号）的位置。
+###### 方法一：深度优先搜索
 
-由于每一步只能移动到下一行「相邻的节点」上，因此要想走到位置(i,j)，上一步就只能在位置 (i−1,j−1) 或者位置 (i - 1, j)(i−1,j)。我们在这两个位置中选择一个路径和较小的来进行转移，状态转移方程为：
+最直观的方法是使用深度优先搜索。在深度优先搜索遍历二叉树时，我们需要考虑当前的节点以及它的孩子节点。
 
-```math
-f[i][j]=min(f[i−1][j−1],f[i−1][j])+c[i][j]
-```
+* 如果当前节点不是叶子节点，则在当前的路径末尾添加该节点，并继续递归遍历该节点的每一个孩子节点。
+* 如果当前节点是叶子节点，则在当前路径末尾添加该节点后我们就得到了一条从根节点到叶子节点的路径，将该路径加入到答案即可。
+如此，当遍历完整棵二叉树以后我们就得到了所有从根节点到叶子节点的路径。当然，深度优先搜索也可以使用非递归的方式实现。
 
-其中 c[i][j] 表示位置 (i,j) 对应的元素值。
-
-注意第 i 行有 i+1 个元素，它们对应的 j 的范围为 [0,i]。当 j=0 或 j=i 时，上述状态转移方程中有一些项是没有意义的。例如当 j=0 时，f[i−1][j−1] 没有意义，因此状态转移方程为：
-
-```math
-f[i][0]=f[i−1][0]+c[i][0]
-```
-
-即当我们在第 i 行的最左侧时，我们只能从第 i−1 行的最左侧移动过来。当 j=i 时，f[i−1][j] 没有意义，因此状态转移方程为：
-
-```math
-f[i][i]=f[i−1][i−1]+c[i][i]
-```
-
-即当我们在第 ii 行的最右侧时，我们只能从第 i-1i−1 行的最右侧移动过来。
-
-最终的答案即为 $f[n−1][0]$ 到 $f[n−1][n−1]$中的最小值，其中 nn 是三角形的行数。
 
 #### 代码实现
 
 ```python
 class Solution:
-    def minimumTotal(self, triangle: List[List[int]]) -> int:
-        n = len(triangle)
-        f = [[0] * n for _ in range(n)]
-        f[0][0] = triangle[0][0]
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+        def construct_paths(root, path):
+            if root:
+                path += str(root.val)
+                if not root.left and not root.right:  # 当前节点是叶子节点
+                    paths.append(path)  # 把路径加入到答案中
+                else:
+                    path += '->'  # 当前节点不是叶子节点，继续递归遍历
+                    construct_paths(root.left, path)
+                    construct_paths(root.right, path)
 
-        for i in range(1, n):
-            f[i][0] = f[i - 1][0] + triangle[i][0]
-            for j in range(1, i):
-                f[i][j] = min(f[i - 1][j - 1], f[i - 1][j]) + triangle[i][j]
-            f[i][i] = f[i - 1][i - 1] + triangle[i][i]
-        
-        return min(f[n - 1])
+        paths = []
+        construct_paths(root, '')
+        return paths
 ```
 
+###### 方法二：广度优先搜索
+
+我们也可以用广度优先搜索来实现。我们维护一个队列，存储节点以及根到该节点的路径。一开始这个队列里只有根节点。在每一步迭代中，我们取出队列中的首节点，如果它是叶子节点，则将它对应的路径加入到答案中。如果它不是叶子节点，则将它的所有孩子节点加入到队列的末尾。当队列为空时广度优先搜索结束，我们即能得到答案。
+
+#### 代码实现
+
+```python
+class Solution:
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        paths = list()
+        if not root:
+            return paths
+
+        node_queue = collections.deque([root])
+        path_queue = collections.deque([str(root.val)])
+
+        while node_queue:
+            node = node_queue.popleft()
+            path = path_queue.popleft()
+
+            if not node.left and not node.right:
+                paths.append(path)
+            else:
+                if node.left:
+                    node_queue.append(node.left)
+                    path_queue.append(path + '->' + str(node.left.val))
+                
+                if node.right:
+                    node_queue.append(node.right)
+                    path_queue.append(path + '->' + str(node.right.val))
+        return paths
+```
 #### 运行结果
-![](image/leetcode_120.png)
+![257](https://user-images.githubusercontent.com/63528028/234439107-e50bf34a-0da2-4338-8432-5aee4736d5b4.png)
 
 
