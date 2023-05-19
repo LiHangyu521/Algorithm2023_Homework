@@ -2,7 +2,7 @@
 ###### Name: 李杭禹
 ###### StudentID: 2201212834
 
-## Leetcode 110
+## Leetcode 240
 
 #### 题目描述
 给定一个二叉树，判断它是否是高度平衡的二叉树。
@@ -38,34 +38,29 @@ height只会被调用一次。
 #### 代码实现
 
 ```python
-class Solution:
-    ##Solution1
-    def isBalanced(self, root: TreeNode) -> bool:
-        def height(root: TreeNode) -> int:
-            if not root:
-                return 0
-            return max(height(root.left), height(root.right)) + 1
+class Solution(object):
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        m = len(matrix)
+        if m==1 :
+            n=0    
+        n = len(matrix[0])
 
-        if not root:
-            return True
-        return abs(height(root.left) - height(root.right)) <= 1 and self.isBalanced(root.left) and self.isBalanced(root.right)
-```
+        i,j = 0,n-1 
+        while i<m and j>=0:
+            tmp = matrix[i][j]
+            if tmp == target :
+                return True
+            elif tmp > target :
+                j-=1
+            else :
+                i+=1
+        return False
 
-```python
-class Solution:
-    ##Solution2
-    def isBalanced(self, root: TreeNode) -> bool:
-        def height(root: TreeNode) -> int:
-            if not root:
-                return 0
-            leftHeight = height(root.left)
-            rightHeight = height(root.right)
-            if leftHeight == -1 or rightHeight == -1 or abs(leftHeight - rightHeight) > 1:
-                return -1
-            else:
-                return max(leftHeight, rightHeight) + 1
-
-        return height(root) >= 0
 ```
 #### 运行结果
 ![110](https://user-images.githubusercontent.com/63528028/234437734-3f461505-5353-463f-ae40-6e383e73eea5.png)
