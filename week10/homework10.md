@@ -47,21 +47,7 @@ class Solution(object):
 
 ## Leetcode 347
 #### 题目描述
-给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
-
-百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
-
-例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
-
-示例 1:
-
-输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
-
-输出: 6 
-
-解释: 节点 2 和节点 8 的最近公共祖先是 6。
-
-链接：https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree
+给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
 
 #### 算法思路
 1. 小顶堆
@@ -101,115 +87,43 @@ public:
         return ret;
     }
 ```
-###### 方法二：一次遍历
-在方法一中，我们对从根节点开始，通过遍历找出到达节点 p 和 q 的路径，一共需要两次遍历。我们也可以考虑将这两个节点放在一起遍历。
 
-整体的遍历过程与方法一中的类似：
-
-* 我们从根节点开始遍历；
-* 如果当前节点的值大于 p 和 q 的值，说明 p 和 q 应该在当前节点的左子树，因此将当前节点移动到它的左子节点；
-* 如果当前节点的值小于 p 和 q 的值，说明 p 和 q 应该在当前节点的右子树，因此将当前节点移动到它的右子节点；
-* 如果当前节点的值不满足上述两条要求，那么说明当前节点就是「分岔点」。此时，p 和 q 要么在当前节点的不同的子树中，要么其中一个就是当前节点。
-
-可以发现，如果我们将这两个节点放在一起遍历，我们就省去了存储路径需要的空间。
-#### 代码实现
-```python
-class Solution:
-    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
-        ancestor = root
-        while True:
-            if p.val < ancestor.val and q.val < ancestor.val:
-                ancestor = ancestor.left
-            elif p.val > ancestor.val and q.val > ancestor.val:
-                ancestor = ancestor.right
-            else:
-                break
-        return ancestor
-```
-#### 运行结果
-![235](https://user-images.githubusercontent.com/63528028/234438667-3e17b046-de07-4c4c-a299-9257347e5eef.png)
-
-## Leetcode 257
+## Leetcode 374
 
 #### 题目描述
-给你一个二叉树的根节点 root ，按 任意顺序 ，返回所有从根节点到叶子节点的路径。
+猜数字游戏的规则如下：
 
-叶子节点 是指没有子节点的节点。
+每轮游戏，我都会从 1 到 n 随机选择一个数字。 请你猜选出的是哪个数字。
+如果你猜错了，我会告诉你，你猜测的数字比我选出的数字是大了还是小了。
+你可以通过调用一个预先定义好的接口 int guess(int num) 来获取猜测结果，返回值一共有 3 种可能的情况（-1，1 或 0）：
 
-示例 1：
+-1：我选出的数字比你猜的数字小 pick < num
+1：我选出的数字比你猜的数字大 pick > num
+0：我选出的数字和你猜的数字一样。恭喜！你猜对了！pick == num
 
-输入：root = [1,2,3,null,5]
-
-输出：["1->2->5","1->3"]
-
-链接：https://leetcode.cn/problems/binary-tree-paths
+链接：https://leetcode.cn/problems/guess-number-higher-or-lower
 
 #### 算法思路
-###### 方法一：深度优先搜索
-
-最直观的方法是使用深度优先搜索。在深度优先搜索遍历二叉树时，我们需要考虑当前的节点以及它的孩子节点。
-
-* 如果当前节点不是叶子节点，则在当前的路径末尾添加该节点，并继续递归遍历该节点的每一个孩子节点。
-* 如果当前节点是叶子节点，则在当前路径末尾添加该节点后我们就得到了一条从根节点到叶子节点的路径，将该路径加入到答案即可。
-如此，当遍历完整棵二叉树以后我们就得到了所有从根节点到叶子节点的路径。当然，深度优先搜索也可以使用非递归的方式实现。
-
+###### 方法一：二分查找
 
 #### 代码实现
 
 ```python
 class Solution:
-    def binaryTreePaths(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[str]
-        """
-        def construct_paths(root, path):
-            if root:
-                path += str(root.val)
-                if not root.left and not root.right:  # 当前节点是叶子节点
-                    paths.append(path)  # 把路径加入到答案中
-                else:
-                    path += '->'  # 当前节点不是叶子节点，继续递归遍历
-                    construct_paths(root.left, path)
-                    construct_paths(root.right, path)
-
-        paths = []
-        construct_paths(root, '')
-        return paths
-```
-
-###### 方法二：广度优先搜索
-
-我们也可以用广度优先搜索来实现。我们维护一个队列，存储节点以及根到该节点的路径。一开始这个队列里只有根节点。在每一步迭代中，我们取出队列中的首节点，如果它是叶子节点，则将它对应的路径加入到答案中。如果它不是叶子节点，则将它的所有孩子节点加入到队列的末尾。当队列为空时广度优先搜索结束，我们即能得到答案。
-
-#### 代码实现
-
-```python
-class Solution:
-    def binaryTreePaths(self, root: TreeNode) -> List[str]:
-        paths = list()
-        if not root:
-            return paths
-
-        node_queue = collections.deque([root])
-        path_queue = collections.deque([str(root.val)])
-
-        while node_queue:
-            node = node_queue.popleft()
-            path = path_queue.popleft()
-
-            if not node.left and not node.right:
-                paths.append(path)
+    def guessNumber(self, n: int) -> int:
+        left, right = 1, n
+        while left < right:
+            mid = (left + right) // 2
+            if guess(mid) <= 0:
+                right = mid   # 答案在区间 [left, mid] 中
             else:
-                if node.left:
-                    node_queue.append(node.left)
-                    path_queue.append(path + '->' + str(node.left.val))
-                
-                if node.right:
-                    node_queue.append(node.right)
-                    path_queue.append(path + '->' + str(node.right.val))
-        return paths
+                left = mid + 1   # 答案在区间 [mid+1, right] 中
+        
+        # 此时有 left == right，区间缩为一个点，即为答案
+        return left
 ```
+
+
 #### 运行结果
 ![257](https://user-images.githubusercontent.com/63528028/234439107-e50bf34a-0da2-4338-8432-5aee4736d5b4.png)
 
