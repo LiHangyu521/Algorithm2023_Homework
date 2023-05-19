@@ -1,4 +1,4 @@
-# Homework8
+# Homework10
 ###### Name: 李杭禹
 ###### StudentID: 2201212834
 
@@ -13,7 +13,8 @@
 链接：https://leetcode.cn/problems/search-a-2d-matrix-ii
 
 #### 算法思路
-
+1. 二分查找
+2. Z字查找
 #### 代码实现
 
 ```python
