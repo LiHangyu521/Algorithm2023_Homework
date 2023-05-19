@@ -5,19 +5,12 @@
 ## Leetcode 240
 
 #### 题目描述
-给定一个二叉树，判断它是否是高度平衡的二叉树。
+编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
 
-本题中，一棵高度平衡二叉树定义为：
+每行的元素从左到右升序排列。
+每列的元素从上到下升序排列。
 
-一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
-
-示例 1：
-
-输入：root = [3,9,20,null,null,15,7]
-
-输出：true
-
-链接：https://leetcode.cn/problems/balanced-binary-tree
+链接：https://leetcode.cn/problems/search-a-2d-matrix-ii
 
 #### 算法思路
 
