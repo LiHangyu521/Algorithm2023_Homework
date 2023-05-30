@@ -1,4 +1,4 @@
-# Homework11
+# Homework 12
 ###### Name: 李杭禹
 ###### StudentID: 2201212834
 
@@ -42,117 +42,48 @@ class Solution:
 #### 运行结果
 ![110](https://user-images.githubusercontent.com/63528028/234437734-3f461505-5353-463f-ae40-6e383e73eea5.png)
 
-## Leetcode 934
+## Leetcode 847
 #### 题目描述
-给你一个大小为 n x n 的二元矩阵 grid ，其中 1 表示陆地，0 表示水域。
+存在一个由 n 个节点组成的无向连通图，图中的节点按从 0 到 n - 1 编号。
 
-岛 是由四面相连的 1 形成的一个最大组，即不会与非组内的任何其他 1 相连。grid 中 恰好存在两座岛 。
+给你一个数组 graph 表示这个图。其中，graph[i] 是一个列表，由所有与节点 i 直接相连的节点组成。
 
-你可以将任意数量的 0 变为 1 ，以使两座岛连接起来，变成 一座岛 。
+返回能够访问所有节点的最短路径的长度。你可以在任一节点开始和停止，也可以多次重访节点，并且可以重用边。
 
-返回必须翻转的 0 的最小数目
-
-链接：https://leetcode.cn/problems/shortest-bridge
 
 #### 算法思路
 1. 广度优先搜索
 
-  题目中求最少的翻转 0 的数目等价于求矩阵中两个岛的最短距离，因此我们可以广度优先搜索来找到矩阵中两个块的最短距离。首先找到其中一座岛，然后将其不断向外延伸一圈，直到到达了另一座岛，延伸的圈数即为最短距离。
+由于题目需要我们求出「访问所有节点的最短路径的长度」，并且图中每一条边的长度均为 1，因此我们可以考虑使用广度优先搜索的方法求出最短路径。
 
-2. 深度优先+广度优先:
+在常规的广度优先搜索中，我们会在队列中存储节点的编号。对于本题而言，最短路径的前提是「访问了所有节点」，因此除了记录节点的编号以外，我们还需要记录每一个节点的经过情况。因此，我们使用三元组 (u,mask,dist) 表示队列中的每一个元素，其中 u 表示当前位于的节点编号；mask 是一个长度为 n 的二进制数，表示每一个节点是否经过。如果 mask 的第 i 位是 1，则表示节点 i 已经过，否则表示节点 i 未经过；dist 表示到当前节点为止经过的路径长度。
 
-  解法思路与方法一类似，我们可以利用深度优先搜索求出其中的一座岛，然后利用广度优先搜索来找到两座岛的最短距离。深度度优先搜索时，我们可以将已经遍历过的位置标记为 −1
-
+这样一来，我们使用该三元组进行广度优先搜索，即可解决本题。初始时，我们将所有的 (i,2^i,0) 放入队列，表示可以从任一节点开始。在搜索的过程中，如果当前三元组中的 mask 包含 n 个 1（即 mask=2n−1），那么我们就可以返回 dist 作为答案。
 
 
 #### 代码实现
 ```python
 class Solution:
-    def shortestBridge(self, grid: List[List[int]]) -> int:
-        n = len(grid)
-        for i, row in enumerate(grid):
-            for j, v in enumerate(row):
-                if v != 1:
-                    continue
-                q = []
-                def dfs(x: int, y: int) -> None:
-                    grid[x][y] = -1
-                    q.append((x, y))
-                    for nx, ny in (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1):
-                        if 0 <= nx < n and 0 <= ny < n and grid[nx][ny] == 1:
-                            dfs(nx, ny)
-                dfs(i, j)
-
-                step = 0
-                while True:
-                    tmp = q
-                    q = []
-                    for x, y in tmp:
-                        for nx, ny in (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1):
-                            if 0 <= nx < n and 0 <= ny < n:
-                                if grid[nx][ny] == 1:
-                                    return step
-                                if grid[nx][ny] == 0:
-                                    grid[nx][ny] = -1
-                                    q.append((nx, ny))
-                    step += 1
-```
-
-## Leetcode 682
-
-#### 题目描述
-
-你现在是一场采用特殊赛制棒球比赛的记录员。这场比赛由若干回合组成，过去几回合的得分可能会影响以后几回合的得分。
-
-比赛开始时，记录是空白的。你会得到一个记录操作的字符串列表 ops，其中 ops[i] 是你需要记录的第 i 项操作，ops 遵循下述规则：
-
-整数 x - 表示本回合新获得分数 x
-"+" - 表示本回合新获得的得分是前两次得分的总和。题目数据保证记录此操作时前面总是存在两个有效的分数。
-"D" - 表示本回合新获得的得分是前一次得分的两倍。题目数据保证记录此操作时前面总是存在一个有效的分数。
-"C" - 表示前一次得分无效，将其从记录中移除。题目数据保证记录此操作时前面总是存在一个有效的分数。
-请你返回记录中所有得分的总和。
-
-链接：https://leetcode.cn/problems/baseball-game
-
-#### 算法思路
-###### 方法一：模拟
-思路与算法
-
-使用变长数组对栈进行模拟。
-
-如果操作是 +，那么访问数组的后两个得分，将两个得分之和加到总得分，并且将两个得分之和入栈。
-
-如果操作是 D，那么访问数组的最后一个得分，将得分乘以2加到总得分，并且将得分乘以2入栈。
-
-如果操作是 C，那么访问数组的最后一个得分，将总得分减去该得分，并且将该得分出栈。
-
-如果操作是整数，那么将该整数加到总得分，并且将该整数入栈。
-
-
-#### 代码实现
-
-```python
-class Solution:
-    def calPoints(self, ops: List[str]) -> int:
+    def shortestPathLength(self, graph: List[List[int]]) -> int:
+        n = len(graph)
+        q = deque((i, 1 << i, 0) for i in range(n))
+        seen = {(i, 1 << i) for i in range(n)}
         ans = 0
-        points = []
-        for op in ops:
-            if op == '+':
-                pt = points[-1] + points[-2]
-            elif op == 'D':
-                pt = points[-1] * 2
-            elif op == 'C':
-                ans -= points.pop()
-                continue
-            else:
-                pt = int(op)
-            ans += pt
-            points.append(pt)
+        
+        while q:
+            u, mask, dist = q.popleft()
+            if mask == (1 << n) - 1:
+                ans = dist
+                break
+            # 搜索相邻的节点
+            for v in graph[u]:
+                # 将 mask 的第 v 位置为 1
+                mask_v = mask | (1 << v)
+                if (v, mask_v) not in seen:
+                    q.append((v, mask_v, dist + 1))
+                    seen.add((v, mask_v))
+        
         return ans
 ```
-
-
-#### 运行结果
-![257](https://user-images.githubusercontent.com/63528028/234439107-e50bf34a-0da2-4338-8432-5aee4736d5b4.png)
 
 
