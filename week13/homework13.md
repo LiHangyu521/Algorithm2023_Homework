@@ -12,26 +12,23 @@
 #### 代码实现
 
 ```C
-class Solution:
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        g = [[float('inf')] * n for _ in range(n)]
-        for x, y, time in times:
-            g[x - 1][y - 1] = time
-
-        dist = [float('inf')] * n
-        dist[k - 1] = 0
-        used = [False] * n
-        for _ in range(n):
-            x = -1
-            for y, u in enumerate(used):
-                if not u and (x == -1 or dist[y] < dist[x]):
-                    x = y
-            used[x] = True
-            for y, time in enumerate(g[x]):
-                dist[y] = min(dist[y], dist[x] + time)
-
-        ans = max(dist)
-        return ans if ans < float('inf') else -1
+bool isPrime(int n){
+    if(n<=3){
+        return n>1;
+    }
+ 
+    if(n%6!=1 && n%6!=5){
+        return false;   
+    }
+    
+    int s = (int)sqrt(n);
+    for(int i=5; i<=s; i+=6){
+        if(n%i==0 || n%(i+2)==0){
+            return false;
+        }
+    }
+ 
+    return true;
+}
 ```
-#### 运行结果
-![110](https://user-images.githubusercontent.com/63528028/234437734-3f461505-5353-463f-ae40-6e383e73eea5.png)
+#### 复杂度分析
