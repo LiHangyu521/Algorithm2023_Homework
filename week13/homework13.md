@@ -5,13 +5,13 @@
 ## 判断素数
 
 #### 题目描述
-提供一个算法复杂度比 $O(sqrt(n))$要低的判断素数的方法，并给出算法复杂度分析过程。
+提供一个算法复杂度比 $O(\sqrt{n})$要低的判断素数的方法，并给出算法复杂度分析过程。
 
 #### 算法思路
 1. 遍历试除+筛选
 #### 代码实现
 
-```python
+```C
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         g = [[float('inf')] * n for _ in range(n)]
